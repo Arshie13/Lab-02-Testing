@@ -1,0 +1,1 @@
+Please ensure there's at least one entry in your database before proceeding.
