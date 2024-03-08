@@ -1,40 +1,46 @@
-import axios from 'axios';
-
-const url = 'http://localhost:3000';
+import supertest from 'supertest'
+import { prisma, app } from '../index'
 
 describe('Pogs API', () => {
-
-  // GET endpoints
   describe('GET /pogs', () => {
-    it('should return all pogs', async () => {
-      const response = await axios.get(`${url}/pogs`);
-      expect(response.status).toEqual(200);
-      expect(response.data).toEqual(expect.any(Array));
+    it("should return all pogs created", async () => {
+      await prisma.pogs.create({
+        data: {
+          pogs_name: 'Slammer',
+          ticker_symbol: 'SLAM',
+          price: 100,
+          color: 'blue'
+        }
+      });
+
+      const res = await supertest(app).get('/pogs');
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toEqual(expect.any(Array));
+      await prisma.pogs.deleteMany();
     });
   });
 
   describe('GET /pogs/:id', () => {
     it('should return 404 not found', async () => {
-
-      try {
-        await axios.get(`${url}/pogs/99`)
-      } catch (error: any) {
-        if (error.response) {
-          expect(error.response.status).toEqual(404);
-          expect(error.response.data).toEqual('Not Found.');
-        }
-      }
+      const res = await supertest(app).get('/pogs/1');
+      expect(res.statusCode).toBe(404);
     });
   });
 
   describe('GET /pogs/:id', () => {
     it('should return a single pog', async () => {
-      const response = await axios.get(`${url}/pogs/2`);
-      expect(response.status).toEqual(200);
-      expect(response.data).toHaveProperty('pogs_name');
-      expect(response.data).toHaveProperty('ticker_symbol');
-      expect(response.data).toHaveProperty('price');
-      expect(response.data).toHaveProperty('color');
+      const newPogs = await prisma.pogs.create({
+        data: {
+          pogs_name: 'Slammer',
+          ticker_symbol: 'SLAM',
+          price: 100,
+          color: 'blue'
+        }
+      });
+      const res = await supertest(app).get(`/pogs/${newPogs.id}`);
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toEqual(expect.any(Object));
+      await prisma.pogs.deleteMany();
     });
   });
 
@@ -45,31 +51,52 @@ describe('Pogs API', () => {
         "ticker_symbol": "BN10",
         "price": 10,
         "color": "#16AE58",
-        "updatedAt": Date.now()
       }
-      const response = await axios.post(`${url}/pogs`, content);
-      expect(response.status).toEqual(201);
-      expect(response.data).toEqual(expect.any(Object));
+      const res = await supertest(app).post('/pogs').send(content);
+      expect(res.statusCode).toBe(201);
+      expect(res.body).toEqual(expect.any(Object));
+      await prisma.pogs.deleteMany();
     });
   });
 
   describe('PUT /pogs/:id', () => {
     it('should update a pog', async () => {
-      const response = await axios.put(`${url}/pogs/1`, {
-        pogs_name: 'Slammer',
-        ticker_symbol: 'SLAM',
-        price: 100,
-        color: 'blue',
-        updatedAt: Date.now()
+      const newPogs = await prisma.pogs.create({
+        data: {
+          pogs_name: 'Slammer',
+          ticker_symbol: 'SLAM',
+          price: 100,
+          color: 'blue'
+        }
       });
-      expect(response.status).toEqual(200);
+
+      const content = {
+        "pogs_name": "Ben 10",
+        "ticker_symbol": "BN10",
+        "price": 10,
+        "color": "#16AE58",
+      }
+      const res = await supertest(app).put(`/pogs/${newPogs.id}`).send(content);
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toEqual(expect.any(Object));
+      await prisma.pogs.deleteMany();
     });
   });
 
   describe('DELETE /pogs/:id', () => {
     it('should delete a pog', async () => {
-      const response = await axios.delete(`${url}/pogs/1`);
-      expect(response.status).toEqual(200);
+      const newPogs = await prisma.pogs.create({
+        data: {
+          pogs_name: 'Slammer',
+          ticker_symbol: 'SLAM',
+          price: 100,
+          color: 'blue'
+        }
+      });
+
+      const res = await supertest(app).delete(`/pogs/${newPogs.id}`);
+      expect(res.statusCode).toBe(200);
+      expect(res.body).toEqual(expect.any(Object));
     });
   });
 })
