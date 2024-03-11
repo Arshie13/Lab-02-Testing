@@ -106,6 +106,12 @@ app.delete('/pogs/:id', async (req, res) => {
   }
 })
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000')
-})
+function startServer() {
+  app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000')
+  })
+}
+
+if (process.env.NODE_ENV !== 'test') {
+  startServer()
+}
