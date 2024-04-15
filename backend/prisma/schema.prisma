@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model pogs {
+  id             Int             @id @default(autoincrement())
+  pogs_name      String          @unique
+  ticker_symbol  String          @unique
+  price          Float
+  color          String
+  //updates
+  previous_price Float           @default(0)
+  wallet         wallet[]
+  //
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  //updates
+  wallet    wallet[]
+  role      String  @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model wallet {
+  id        Int      @id @default(autoincrement())
+  user      user     @relation(fields: [user_id], references: [id])
+  user_id   Int
+  pogs      pogs     @relation(fields: [pogs_id], references: [id])
+  pogs_id   Int
+  balance   Float    @default(0)
+  quantity  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
