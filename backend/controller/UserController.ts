@@ -68,39 +68,6 @@ class UserController {
     }
   }
 
-  async buyPogs(req: express.Request, res: express.Response) {
-    const { user_id, pog_id, quantity } = req.body;
-    try {
-      const user = await UserService.buyPogs(user_id, pog_id, quantity);
-      res.status(200).send(user);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error.');
-    }
-  }
-
-  async sellPogs(req: express.Request, res: express.Response) {
-    const { user_id, pog_id, quantity } = req.body;
-    try {
-      const user = await UserService.sellPogs(user_id, pog_id, quantity);
-      res.status(200).send(user);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error.');
-    }
-  }
-
-  async increaseBalance(req: express.Request, res: express.Response) {
-    const { user_id, balance } = req.body;
-    try {
-      const user = await UserService.increaseBalance(user_id, balance);
-      res.status(200).send(user);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error.');
-    }
-  }
-
   async getAllUsers(req: express.Request, res: express.Response) {
     try {
       const users = await UserService.getAllUsers();

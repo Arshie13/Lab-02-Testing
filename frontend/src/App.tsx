@@ -9,6 +9,8 @@ import AdminPage from './components/AdminPage'
 import AddPogs from './components/AddPogs'
 import Market from './components/Market'
 import Test from './components/Test'
+import UserPage from './components/UserPage'
+import BuyPogs from './components/BuyPogs'
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path='/add-pogs' element={<AddPogs/>}/>
           <Route path='/market' element={<Market/>}/>
           <Route path='/test' element={<Test/>}/>
+          <Route path='/userpage' element={<UserPage/>}/>
+          <Route path='/buy-pogs' element={<BuyPogs/>} />
         </Routes>
       </BrowserRouter>
     </>

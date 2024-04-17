@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 
-const Market = () => {
+const BuyPogs = () => {
 
   const [pogs, setPogs] = React.useState([]);
   const [quantity, setQuantity] = React.useState<number>();
@@ -47,7 +47,7 @@ const Market = () => {
           <div key={pog.id}>
             <h2>{pog.pogs_name}</h2>
             <p>Price: {pog.price}</p>
-            <input type="number" placeholder='quantity' value={quantity} onChange={handleChange} />
+            <input type="number" placeholder='quantity' value={quantity} onChange={handleChange}/>
             <button onClick={() => handleBuy(pog.id)}>Buy</button>
           </div>
         ))}
@@ -56,4 +56,4 @@ const Market = () => {
   )
 }
 
-export default Market
+export default BuyPogs

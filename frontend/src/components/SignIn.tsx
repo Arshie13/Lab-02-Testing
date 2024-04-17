@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
@@ -35,7 +34,7 @@ export default function SignIn() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     try {
       const data = new FormData(event.currentTarget);
@@ -45,6 +44,8 @@ export default function SignIn() {
       };
       const response = await axios.post('http://localhost:3000/user/api-login', formValues);
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user_id', response.data.userId);
+      console.log('response:', response.data.userId);
       navigate('/home')
     } catch (error) {
       console.error('Error signing in:', error);
@@ -109,7 +110,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

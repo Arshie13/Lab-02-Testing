@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { get } from "http";
 
 const prisma = new PrismaClient();
 
@@ -8,9 +7,11 @@ class PogsDAO {
     return await prisma.pogs.findMany();
   }
 
-  async getPogsById(id: number) {
+  async getPogsById(pogs_id: number) {
     return await prisma.pogs.findUnique({
-      where: { id }
+      where: {
+        id: pogs_id
+      }
     });
   }
 
@@ -35,7 +36,7 @@ class PogsDAO {
     const pogsList = await this.getAllPogs();
     for (let pog of pogsList) {
       let currentPogPrice = pog.price;
-      let randomPrice = Math.floor(Math.random() * 1000);
+      let randomPrice = Math.ceil(Math.random() * 1000);
       await this.updatePogs(pog.id, { price: randomPrice, previous_price: currentPogPrice});
     }
   }
@@ -49,10 +50,11 @@ class PogsDAO {
 
 export default new PogsDAO();
 
+// const Pogsdao = new PogsDAO();
+
 // async function log() {
-//   const Pogs = new PogsDAO();
-//   await Pogs.updatePogsPriceToRandom();
-//   console.log('Prices updated.');
+//   const getPogs = await Pogsdao.getPogsById(13);
+//   console.log('PogsDAO create pogs:', getPogs);
 // }
 
 // log();

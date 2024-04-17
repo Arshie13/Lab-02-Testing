@@ -5,12 +5,30 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 class UserService {
+
   async getUserById(id: number) {
     if (!id) {
       return { error: 'Bad Request.' };
     }
     try {
       const user = await UserDAO.getUserById(id);
+      if (!user) {
+        return { error: 'User not found.' };
+      } else {
+        return user;
+      }
+    } catch (error) {
+      console.error(error);
+      return { error: 'Internal Server Error.' };
+    }
+  }
+
+  async getUserByUsername(username: string) {
+    if (!username) {
+      return { error: `Bad Request.` };
+    }
+    try {
+      const user = await UserDAO.getUserByUsername(username);
       if (!user) {
         return { error: 'User not found.' };
       } else {
@@ -49,6 +67,20 @@ class UserService {
     }
   }
 
+  async getAllUsers() {
+    try {
+      let users = await UserDAO.getAllUsers();
+      if (users.length === 0) {
+        return { error: 'No users found.' };
+      } else {
+        return users;
+      }
+    } catch (error) {
+      console.error(error);
+      return { error: 'Internal Server Error.' };
+    }
+  }
+
   async userLogin(email: string, password: string) {
     const user = await this.getUserByEmail(email)
     if ("error" in user) return user.error;
@@ -63,64 +95,6 @@ class UserService {
       return await this.createUser(email, username, password);
     } else {
       return { error: 'User already exists.' };
-    }
-  }
-
-  async buyPogs(user_id: number, pog_id: number, quantity: number) {
-    const user = await this.getUserById(user_id);
-    if ("error" in user) return user.error;
-    const pog = await PogsDAO.getPogsById(pog_id);
-    if ("error" in pog!) return pog.error;
-    const wallet = await WalletDAO.getWalletByUserId(user_id);
-    if ("error" in wallet) return wallet.error;
-    else {
-      if (wallet.balance < pog!.price * quantity) {
-        return { error: 'Insufficient funds.' };
-      } else {
-        const newBalance = wallet.balance - pog!.price * quantity;
-        await WalletDAO.updateWallet(wallet.id, { balance: newBalance });
-        return { message: 'Pogs bought successfully.' };
-      }
-    }
-  }
-
-  async sellPogs(user_id: number, pog_id: number, quantity: number) {
-    const user = await this.getUserById(user_id);
-    if ("error" in user) return user.error;
-    const pog = await PogsDAO.getPogsById(pog_id);
-    if ("error" in pog!) return pog.error;
-    const wallet = await WalletDAO.getWalletByUserId(user_id);
-    if ("error" in wallet) return wallet.error;
-    else {
-      const newBalance = wallet.balance + pog!.price * quantity;
-      await WalletDAO.updateWallet(wallet.id, { balance: newBalance });
-      return { message: 'Pogs sold successfully.' };
-    }
-  }
-
-  async increaseBalance(user_id: number, amount: number) {
-    const user = await this.getUserById(user_id);
-    if ("error" in user) return user.error;
-    const wallet = await WalletDAO.getWalletByUserId(user_id);
-    if ("error" in wallet) return wallet.error;
-    else {
-      const newBalance = wallet.balance + amount;
-      await WalletDAO.updateWallet(wallet.id, { balance: newBalance });
-      return { message: 'Balance increased successfully.' };
-    }
-  }
-
-  async getAllUsers() {
-    try {
-      let users = await UserDAO.getAllUsers();
-      if (users.length === 0) {
-        return { error: 'No users found.' };
-      } else {
-        return users;
-      }
-    } catch (error) {
-      console.error(error);
-      return { error: 'Internal Server Error.' };
     }
   }
 
@@ -152,6 +126,25 @@ class UserService {
     } catch (error) {
       console.error(error);
       return { error: 'Internal Server Error.' };
+    }
+  }
+
+  async buyPogs(user_id: number, pogs_id: number, quantity: number) {
+    const user = await this.getUserById(user_id);
+    const pog = await PogsDAO.getPogsById(pogs_id);
+    if (!user || !pog) {
+      return { error: 'User or Pog not found.' };
+    } else {
+      let wallet = await WalletDAO.getWalletByUserId(user_id, pogs_id);
+      if (!wallet) {
+        wallet = await WalletDAO.createWallet(user_id, pog.id);
+        // might be an error
+        await WalletDAO.updateWallet(user_id, pogs_id, { quantity: quantity });
+        return { success: 'Pogs bought successfully.' };
+      } else {
+        await WalletDAO.updateWallet(user_id, pogs_id, { quantity: wallet.quantity + quantity });
+        return { success: 'Pogs bought successfully.' };
+      }
     }
   }
 

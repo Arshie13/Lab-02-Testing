@@ -28,6 +28,7 @@ model user {
   password  String
   //updates
   wallet    wallet[]
+  balance   Float    @default(0)
   role      String  @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -39,7 +40,6 @@ model wallet {
   user_id   Int
   pogs      pogs     @relation(fields: [pogs_id], references: [id])
   pogs_id   Int
-  balance   Float    @default(0)
   quantity  Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
