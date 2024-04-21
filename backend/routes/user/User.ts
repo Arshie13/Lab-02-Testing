@@ -11,4 +11,4 @@ userRouter.get('/api-get-email', UserController.getUserByEmail);
 userRouter.post('/api-login', UserController.userLogin);
 userRouter.post('/api-register', UserController.userRegister);
 userRouter.put('/api/:id', UserController.updateUser);
-userRouter.delete('/api/:id', UserController.deleteUser);
+userRouter.delete('/api', UserController.deleteUser);

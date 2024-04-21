@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
@@ -27,10 +28,9 @@ function Copyright(props: any) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+function SignIn() {
 
   const navigate = useNavigate();
 
@@ -45,10 +45,16 @@ export default function SignIn() {
       const response = await axios.post('http://localhost:3000/user/api-login', formValues);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user_id', response.data.userId);
-      console.log('response:', response.data.userId);
       navigate('/home')
-    } catch (error) {
-      console.error('Error signing in:', error);
+      
+    } catch (error: any) {
+      if (axios.isAxiosError(error) ||
+        error.response === undefined ||
+        error.request === undefined) {
+        navigate('/not-found');
+      } else {
+        console.error('Error signing in:', error);
+      }
     }
   };
 
@@ -122,3 +128,5 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+
+export default SignIn;

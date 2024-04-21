@@ -41,12 +41,12 @@ class UserService {
   }
 
   async getUserByEmail(email: string) {
-    if (!email) {
+    if (!email || email === '') {
       return { error: `Bad Request.` };
     }
     try {
       const user = await UserDAO.getUserByEmail(email);
-      if (!user) {
+      if (user === undefined || user === null) {
         return { error: 'User not found.' };
       } else {
         return user;

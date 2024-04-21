@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Grid, Paper, Typography } from '@mui/material';
 import Navbar from './Navbar';
+import Market from './Market';
 import './ScrollAnimation.css';
 import axios from 'axios';
 

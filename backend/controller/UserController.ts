@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 class UserController {
+  
   async getUserById(req: express.Request, res: express.Response) {
     const id = Number(req.params.id);
     try {
@@ -36,10 +37,9 @@ class UserController {
 
   async userLogin(req: express.Request, res: express.Response) {
     const { email, password } = req.body;
-
     try {
       const user = await UserService.userLogin(email, password);
-      if (typeof user === "string" || !user) res.status(404).send(user);
+      if (typeof user === "string" || user === undefined) res.status(404).send(user);
       else {
         const userId = user.id;
         const token = jwt.sign(user, 'super secret key here');
@@ -123,7 +123,7 @@ class UserController {
   }
 
   async deleteUser(req: express.Request, res: express.Response) {
-    const id = Number(req.params.id);
+    const id = Number(req.body.user_id);
     try {
       const deletedUser = await UserService.deleteUser(id);
       res.status(200).send(deletedUser);

@@ -11,6 +11,7 @@ import Market from './components/Market'
 import Test from './components/Test'
 import UserPage from './components/UserPage'
 import BuyPogs from './components/BuyPogs'
+import NotFound from './components/NotFound'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path='/test' element={<Test/>}/>
           <Route path='/userpage' element={<UserPage/>}/>
           <Route path='/buy-pogs' element={<BuyPogs/>} />
+          <Route path="/not-found" element={<NotFound/>}/>
         </Routes>
       </BrowserRouter>
     </>

@@ -15,6 +15,24 @@ interface PogsInfo {
   updatedAt: Date;
 }
 
+const checkIfAdmin = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/users/api-auth', {
+      headers: {
+        Authorization: `${localStorage.getItem('token')}`,
+      },
+    });
+    if (response.data.role === 'admin') {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error checking if user is admin:', error);
+    alert('You are not an admin. Please login as an admin to access this page.');
+    return false;
+  }
+}
+
 const AdminPage = () => {
   const [pogsData, setPogsData] = useState<PogsInfo[]>([]);
   const [editingPogs, setEditingPogs] = useState<PogsInfo | null>(null);
