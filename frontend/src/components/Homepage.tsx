@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Grid, Paper, Typography } from '@mui/material';
 import Navbar from './Navbar';
-import Market from './Market';
 import './ScrollAnimation.css';
+import InfiniteScroll from './Slide';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-interface PogsInfo {
+interface Pogs {
   id: number;
   pogs_name: string;
   ticker_symbol: string;
@@ -17,14 +18,16 @@ interface PogsInfo {
 }
 
 const Homepage = () => {
-  const [pogsData, setPogsData] = React.useState<PogsInfo[]>([]);
+  const [pogsData, setPogsData] = React.useState<Pogs[]>([]);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:3000/pogs/api');
         setPogsData(response.data);
       } catch (error) {
-        console.error('Error fetching crypto data:', error);
+        console.error('Error fetching crypto: ', error);
+        navigate('/server-error')
       }
     };
 
@@ -35,30 +38,7 @@ const Homepage = () => {
     <div>
       <div>
         <Navbar />
-      </div>
-      <div style={{marginTop: 50}}>
-        <div className="banner-wrapper">
-          <div className="wrapper">
-            <div className="pogs">
-              {pogsData.map((pog) => (
-                <div className='pog'>
-                  <Paper style={{ backgroundColor: pog.color }}>
-                    <Typography variant="subtitle1">{pog.ticker_symbol}: ${pog.price}</Typography>
-                  </Paper>
-                </div>
-              ))}
-            </div>
-            <div className="pogs">
-              {pogsData.map((pog) => (
-                <div className='pog'>
-                  <Paper style={{ backgroundColor: pog.color }}>
-                    <Typography variant="subtitle1">{pog.ticker_symbol}: ${pog.price}</Typography>
-                  </Paper>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <InfiniteScroll pogsData={pogsData}/>
       </div>
       <div>
         <Typography variant="h4" gutterBottom>
@@ -71,7 +51,7 @@ const Homepage = () => {
                 <Typography variant="h5" style={{ backgroundColor: pogs.color.toLowerCase() }}>{pogs.pogs_name}</Typography>
                 <Typography variant="subtitle1">Symbol: {pogs.ticker_symbol}</Typography>
                 <Typography variant="body1">Price: ${pogs.price}</Typography>
-                <Typography variant="body1">Previous Price: ${pogs.previous_price}</Typography>
+                {/* <Typography variant="body1">Previous Price: ${pogs.previous_price}</Typography> */}
               </Paper>
             </Grid>
           ))}

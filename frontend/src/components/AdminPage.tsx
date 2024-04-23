@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Paper, Typography, Button, TextField } from '@mui/material';
 import Navbar from './Navbar';
@@ -40,6 +40,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     fetchData();
+    // checkIfAdmin();
   }, []);
 
   const fetchData = async () => {

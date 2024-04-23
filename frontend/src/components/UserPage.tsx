@@ -23,7 +23,6 @@ const Homepage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('user_id:', user_id)
         const response = await axios.get(`http://localhost:3000/wallet/api-user-pogs-info/${user_id}`);
         if (!Array.isArray(response.data) || !response.data.length) {
           console.error('Error fetching crypto data:', response.data);

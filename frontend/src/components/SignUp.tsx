@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { validateEmail, validateName, validatePassword } from './validator/FieldValidator';
 
 function Copyright(props: any) {
   return (
@@ -21,7 +22,6 @@ function Copyright(props: any) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignUp() {
@@ -38,11 +38,26 @@ export default function SignUp() {
         email: data.get('email') as string,
         password: data.get('password') as string,
       };
+
+      if (validateName(formValues.username) !== true) {
+        alert(validateName(formValues.username));
+        navigate('/error')
+      } else if (validateEmail(formValues.email) !== true) {
+        alert(validateEmail(formValues.email));
+        navigate('/error')
+      } else {
+        if (validatePassword(formValues.password) !== true) {
+          alert(validatePassword(formValues.password));
+          navigate('/error')
+        }
+      }
+
       await axios.post('http://localhost:3000/user/api-register', formValues);
-      alert('User registered successfully');
+      console.log('User registered successfully');
       navigate('/signin');
     } catch (error) {
-      console.error('Error signing up:', error);
+      console.error('Error signing up: ', error);
+      navigate('/server-error')
     }
   };
 

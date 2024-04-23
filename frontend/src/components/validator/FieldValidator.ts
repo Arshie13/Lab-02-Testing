@@ -1,11 +1,3 @@
-export const validate = (data: any): string | boolean => {
-  if (validateName(data.name) === true && validateEmail(data.email) === true && validatePassword(data.password) === true) {
-    return validateName(data.name);
-  } else {
-    return validateName(data.name) || validateEmail(data.email) || validatePassword(data.password);
-  }
-}
-
 export const validateName = (name: string): string | boolean => {
   if (
     !name || name === ''
@@ -73,3 +65,5 @@ export const validatePassword = (password: string): string | boolean => {
 //   createdAt: Date;
 //   updatedAt: Date;
 // }[]
+
+// console.log(validate({ name: 'Arshie', email: 'testingexamplecom', password: 'aaron123'}))

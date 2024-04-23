@@ -11,7 +11,9 @@ import Market from './components/Market'
 import Test from './components/Test'
 import UserPage from './components/UserPage'
 import BuyPogs from './components/BuyPogs'
-import NotFound from './components/NotFound'
+import NotFound from './components/errors/NotFound'
+import ServerError from './components/errors/ServerError'
+import FieldsError from './components/errors/FieldsError'
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           <Route path='/userpage' element={<UserPage/>}/>
           <Route path='/buy-pogs' element={<BuyPogs/>} />
           <Route path="/not-found" element={<NotFound/>}/>
+          <Route path="/server-error" element={<ServerError/>}/>
+          <Route path="/error" element={<FieldsError/>}/>
         </Routes>
       </BrowserRouter>
     </>

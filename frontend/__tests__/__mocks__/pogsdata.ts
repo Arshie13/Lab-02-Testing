@@ -1,0 +1,20 @@
+export const pogsData = [{
+  id: 1,
+  pogs_name: 'Bitcoin',
+  ticker_symbol: 'BTC',
+  price: 50000,
+  color: '#ffcc00',
+  previous_price: 48000,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+},
+{
+  id: 1,
+  pogs_name: 'Litecoin',
+  ticker_symbol: 'LTC',
+  price: 5000,
+  color: '#ffcc00',
+  previous_price: 4800,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+}]
