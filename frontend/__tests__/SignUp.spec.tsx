@@ -29,10 +29,10 @@ describe('SignUp component', () => {
     });
 
     const { getByLabelText, getByRole } = render(
-    <Router>
-      <SignUp />
-    </Router>
-  );
+      <Router>
+        <SignUp />
+      </Router>
+    );
     fireEvent.change(getByLabelText(/username/i), { target: { value: 'testuser' } });
     fireEvent.change(getByLabelText(/email address/i), { target: { value: 'test@example.com' } });
     fireEvent.change(getByLabelText(/password/i), { target: { value: 'password123' } });
@@ -45,7 +45,7 @@ describe('SignUp component', () => {
   });
 
   it('should handle sign up error', async () => {
-    
+
     mockedAxios.post.mockRejectedValueOnce({
       response: { status: 500 }
     });

@@ -9,7 +9,7 @@ export const pogsData = [{
   updatedAt: new Date(),
 },
 {
-  id: 1,
+  id: 2,
   pogs_name: 'Litecoin',
   ticker_symbol: 'LTC',
   price: 5000,

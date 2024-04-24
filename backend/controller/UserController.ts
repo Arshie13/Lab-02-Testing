@@ -84,6 +84,7 @@ class UserController {
 
   async getCurrentUser(req: express.Request, res: express.Response) {
     const authHeader = req.headers['authorization'];
+    console.log(authHeader)
     if (!authHeader) return res.status(401).send('Access Denied');
     try {
       await UserService.getCurrentUser(authHeader).then((user) => {
@@ -135,3 +136,10 @@ class UserController {
 }
 
 export default new UserController();
+
+// const userController = new UserController();
+
+// async function log() {
+//   const response = await userController.getCurrentUser('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjEsImVtYWlsIjoiYXJzaGVpMTNAZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6IkFyc2hpZTEzIiwicGFzc3dvcmQiOiIkMmIkMTAkek1HSnFTbmY4UDY1Ni5QRk50TXMyLmdveENuSmpkaGxSWGtYNEp0a2Y4aXVLS2k2ZUQyRG0iLCJiYWxhbmNlIjo5ODU4ODAsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDQtMTZUMDg6NTQ6MTkuNzg2WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDQtMTdUMTQ6NDY6MTEuODM1WiIsImlhdCI6MTcxMzkyNjQzNX0.kqx31QFQiEMBSfXYr3uQg2sik9dRlzsiXk-4Ady1oiA')
+
+// }

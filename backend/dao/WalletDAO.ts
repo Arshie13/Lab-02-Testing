@@ -23,36 +23,32 @@ class WalletDAO {
       where: {
         user_id: user_id,
       },
-      include: {
-        user: {
-          select: {
-            username: true,
-          },
-        },
+      select: {
+        quantity: true,
         pogs: {
           select: {
             id: true,
             pogs_name: true,
             ticker_symbol: true,
-            color: true,
             price: true,
+            color: true,
             previous_price: true,
           },
-        }
+        },
       },
     });
+    // Initialize an object to store the combined information
+    const userPogsInfo = userWalletInfo.map((wallet) => ({
+      id: wallet.pogs.id,
+      pogs_name: wallet.pogs.pogs_name,
+      ticker_symbol: wallet.pogs.ticker_symbol,
+      price: wallet.pogs.price,
+      color: wallet.pogs.color,
+      previous_price: wallet.pogs.previous_price,
+      quantity: wallet.quantity ?? 0,
+    }));
 
-    // Process the userWalletInfo to include all properties of each pog in one object
-    const formattedUserWalletInfo = userWalletInfo.map(entry => {
-      const formattedPog = {
-        ...entry.pogs,
-        username: entry.user.username,
-        quantity: entry.quantity,
-      };
-      return formattedPog;
-    });
-
-    return formattedUserWalletInfo;
+    return userPogsInfo;
   }
 
 
@@ -77,6 +73,16 @@ class WalletDAO {
   }
 
   async deleteWallet(id: number) {
+    const wallet = await prisma.wallet.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!wallet) {
+      throw new Error(`Wallet with id ${id} does not exist`);
+    }
+
     return prisma.wallet.delete({
       where: {
         id: id,
@@ -86,3 +92,11 @@ class WalletDAO {
 }
 
 export default new WalletDAO();
+
+// const walletDAO = new WalletDAO();
+
+// async function log() {
+//   console.log(await walletDAO.getUserPogsInfo(21))
+// }
+
+// log()

@@ -27,7 +27,7 @@ describe('Homepage component', () => {
   });
 
   it('should handle error when fetching Pogs data', async () => {
-    mockedAxios.get.mockRejectedValueOnce(new Error('Error fetching crypto data'));
+    mockedAxios.get.mockRejectedValueOnce({ response: 404 });
 
     const { getByText } = render(
       <Router>
@@ -36,7 +36,7 @@ describe('Homepage component', () => {
     );
 
     await waitFor(() => {
-      expect(getByText('Error fetching crypto data')).toBeInTheDocument();
+      expect(window.location.pathname).toBe('/server-error');
     });
   });
 });

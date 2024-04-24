@@ -11,24 +11,21 @@ interface PogsInfo {
   price: number;
   color: string;
   previous_price: number;
+  quantity: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const Homepage = () => {
+const UserPage = () => {
   const [pogsData, setPogsData] = React.useState<PogsInfo[]>([]);
-  const [buyPogs, setBuyPogs] = React.useState<PogsInfo[]>([]);
   const user_id = localStorage.getItem('user_id');
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/wallet/api-user-pogs-info/${user_id}`);
-        if (!Array.isArray(response.data) || !response.data.length) {
-          console.error('Error fetching crypto data:', response.data);
-        } else {
-          setPogsData(response.data);
-        }
+        console.log("response: ", response.data)
+        setPogsData(response.data);
       } catch (error) {
         console.error('Error fetching crypto data:', error);
       }
@@ -39,14 +36,13 @@ const Homepage = () => {
 
   const handleBuyPogs = async (pogs_id: number) => {
     try {
-      console.log('pogs_id:', pogs_id);
-      const response = await axios.post('http://localhost:3000/wallet/api-buy-pogs', {
+      await axios.post('http://localhost:3000/wallet/api-buy-pogs', {
         user_id: user_id,
         pogs_id: pogs_id,
         quantity: 1,
       });
-      setBuyPogs(response.data);
       alert('Pogs bought successfully!')
+      window.location.reload();
     } catch (error) {
       console.error('Error buying pogs:', error);
     }
@@ -54,14 +50,13 @@ const Homepage = () => {
 
   const handleSellPogs = async (pogs_id: number) => {
     try {
-      console.log('pogs_id:', pogs_id);
-      const response = await axios.post('http://localhost:3000/wallet/api-sell-pogs', {
+      await axios.post('http://localhost:3000/wallet/api-sell-pogs', {
         user_id: user_id,
-        pogs_id: pogs_id,
+        pogs_id,
         quantity: 1,
       });
-      setBuyPogs(response.data);
       alert('Pogs sold successfully!')
+      window.location.reload();
     } catch (error) {
       console.error('Error selling pogs:', error);
     }
@@ -72,7 +67,7 @@ const Homepage = () => {
       <div>
         <Navbar />
       </div>
-      <div>
+      <div style={{marginTop: 50}}>
         <Typography variant="h4" gutterBottom>
           User's Pogs Owned
         </Typography>
@@ -80,12 +75,12 @@ const Homepage = () => {
           {pogsData.map((pogs, index) => (
             <Grid item xs={12} sm={12} md={12} key={index} >
               <Paper style={{ padding: 20 }}>
-                <Button variant="contained" color="primary" onClick={async () => {
+                <Button variant="contained" className='buy-button' color="primary" onClick={async () => {
                   await handleBuyPogs(pogs.id);
                 }} style={{ marginBottom: 10 }}>
                   Buy Pog
                 </Button>
-                <Button variant="contained" color="primary" onClick={async () => {
+                <Button variant="contained" className='sell-button' color="primary" onClick={async () => {
                   await handleSellPogs(pogs.id);
                 }} style={{ marginBottom: 10 }}>
                   Sell Pog
@@ -94,6 +89,7 @@ const Homepage = () => {
                 <Typography variant="subtitle1">Symbol: {pogs.ticker_symbol}</Typography>
                 <Typography variant="body1">Price: ${pogs.price}</Typography>
                 <Typography variant="body1">Previous Price: ${pogs.previous_price}</Typography>
+                <Typography variant="body1">Quantity: {pogs.quantity}</Typography>
               </Paper>
             </Grid>
           ))}
@@ -103,4 +99,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default UserPage;

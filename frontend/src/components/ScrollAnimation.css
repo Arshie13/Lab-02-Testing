@@ -18,20 +18,20 @@
 }
 
 .banner-wrapper .wrapper {
-  display: flex;
+  display: inline-block;
   width: 200%;
 }
 
 .banner-wrapper .wrapper .pogs {
-  display: flex;
-  animation: swipe 5000ms linear infinite;
+  display: inline-flex;
+  animation: swipe 15s linear infinite;
 }
 
 @keyframes swipe {
   0% {
-    transform: translateX(0);
+    transform: translateX(20vw);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-150vw);
   }
 }

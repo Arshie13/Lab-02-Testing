@@ -172,39 +172,7 @@ export default new UserService();
 // const userService = new UserService();
 
 // async function log() {
-// const createUser = await userService.createUser({
-//   email: 'email@email.com',
-//   password: 'password',
-//   username: 'Username',
-// });
-// console.log('UserService create user:', createUser);
-
-//   const users = await userService.getAllUsers();
-//   if (!Array.isArray(users)) {
-//     console.log('User service error: ' + users.error);
-//   } else {
-//     console.log('UserService get all users:' + users.forEach(user => console.log(user)));
-//     console.log('\n');
-
-//     const user = await userService.getUserById(users[0].id);
-//     console.log('UserService get user by id:', user);
-//     console.log('\n');
-
-//     const userByEmail = await userService.getUserByEmail(users[0].email);
-//     console.log('UserService get user by email:', userByEmail);
-//     console.log('\n');
-
-//     const updateUser = await userService.updateUser(users[0].id, {
-//       email: 'updatedEmail@email.com',
-//       password: 'updatedPassword',
-//       username: 'UpdatedUsername',
-//     });
-//     console.log('UserService update user:', updateUser);
-//     console.log('\n');
-
-//     const deleteUser = await userService.deleteUser(users[0].id);
-//     console.log('UserService delete user:', deleteUser);
-//   }
+//   console.log(userService.getCurrentUser('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjEsImVtYWlsIjoiYXJzaGVpMTNAZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6IkFyc2hpZTEzIiwicGFzc3dvcmQiOiIkMmIkMTAkek1HSnFTbmY4UDY1Ni5QRk50TXMyLmdveENuSmpkaGxSWGtYNEp0a2Y4aXVLS2k2ZUQyRG0iLCJiYWxhbmNlIjo5ODU4ODAsInJvbGUiOiJhZG1pbiIsImNyZWF0ZWRBdCI6IjIwMjQtMDQtMTZUMDg6NTQ6MTkuNzg2WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDQtMTdUMTQ6NDY6MTEuODM1WiIsImlhdCI6MTcxMzkyNjQzNX0.kqx31QFQiEMBSfXYr3uQg2sik9dRlzsiXk-4Ady1oiA'))
 // }
 
 // log();

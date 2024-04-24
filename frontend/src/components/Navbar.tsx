@@ -1,8 +1,28 @@
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 const Navbar = () => {
+
+  const navigate = useNavigate();
+
+  const checkIfAdmin = async () => {
+    try {
+      const userId = localStorage.getItem('user_id');
+      const response = await axios.get('http://localhost:3000/user/api/' + userId);
+      if (response.data.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/not-found');
+      }
+    } catch (error) {
+      console.error('Error checking if user is admin:', error);
+      alert('You are not an admin. Please login as an admin to access this page.');
+      return;
+    }
+  };
 
   const logout = () => {
     localStorage.clear();
@@ -20,7 +40,7 @@ const Navbar = () => {
         <Button component={Link} to="/userpage" color='inherit'>View User's Pogs</Button>
         <Button component={Link} to="/about" color="inherit">About</Button>
         <Button component={Link} to="/contact" color="inherit">Contact</Button>
-        <Button component={Link} to="/admin" color="inherit" >Admin Control</Button>
+        <Button onClick={ checkIfAdmin } color="inherit" >Admin Control</Button>
         <Button onClick={logout} color='inherit'>Logout</Button>
       </Toolbar>
     </AppBar>

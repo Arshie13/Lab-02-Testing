@@ -51,7 +51,7 @@ const Homepage = () => {
                 <Typography variant="h5" style={{ backgroundColor: pogs.color.toLowerCase() }}>{pogs.pogs_name}</Typography>
                 <Typography variant="subtitle1">Symbol: {pogs.ticker_symbol}</Typography>
                 <Typography variant="body1">Price: ${pogs.price}</Typography>
-                {/* <Typography variant="body1">Previous Price: ${pogs.previous_price}</Typography> */}
+                <Typography variant="body1">Previous Price: ${pogs.previous_price}</Typography>
               </Paper>
             </Grid>
           ))}

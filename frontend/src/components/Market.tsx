@@ -1,59 +1,83 @@
-import React from 'react'
-import axios from 'axios'
+import React, { useEffect } from 'react';
+import { Button, Grid, Paper, Typography } from '@mui/material';
+import Navbar from './Navbar';
+import './ScrollAnimation.css';
+import axios from 'axios';
+
+interface PogsInfo {
+  id: number;
+  pogs_name: string;
+  ticker_symbol: string;
+  price: number;
+  color: string;
+  previous_price: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const Market = () => {
-
-  const [pogs, setPogs] = React.useState([]);
-  const [quantity, setQuantity] = React.useState<number>();
+  const [pogsData, setPogsData] = React.useState<PogsInfo[]>([]);
   const user_id = localStorage.getItem('user_id');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/pogs/api');
-        setPogs(response.data);
+        const response = await axios.get(`http://localhost:3000/pogs/api`);
+        if (!Array.isArray(response.data) || !response.data.length) {
+          console.error('Error fetching crypto data:', response.data);
+        } else {
+          setPogsData(response.data);
+        }
       } catch (error) {
-        console.error('Error fetching Pogs data:', error);
+        console.error('Error fetching crypto data:', error);
       }
     };
 
     fetchData();
   }, []);
 
-  const handleChange = (event: any) => {
-    setQuantity(event.target.value);
-  }
-
-  const handleBuy = async (pogs_id: number) => {
+  const handleBuyPogs = async (pogs_id: number) => {
     try {
-      console.log("user_id: ", user_id, "pogs_id: ", pogs_id)
-      const formData = {
+      await axios.post('http://localhost:3000/wallet/api-buy-pogs', {
         user_id: user_id,
         pogs_id: pogs_id,
-        quantity: quantity,
-      }
-      await axios.post('http://localhost:3000/wallet/api-buy-pogs', formData);
-      alert("Successfully bought Pogs")
+        quantity: 1,
+      });
+      alert('Pogs bought successfully!')
     } catch (error) {
-      console.error('Error buying Pogs:', error);
+      console.error('Error buying pogs:', error);
     }
   };
 
   return (
     <div>
-      <h1>Buy Pogs</h1>
       <div>
-        {pogs.map((pog: any) => (
-          <div key={pog.id}>
-            <h2>{pog.pogs_name}</h2>
-            <p>Price: {pog.price}</p>
-            <input type="number" placeholder='quantity' value={quantity} onChange={handleChange} />
-            <button onClick={() => handleBuy(pog.id)}>Buy</button>
-          </div>
-        ))}
+        <Navbar />
+      </div>
+      <div style={{marginTop: 50}}>
+        <Typography variant="h4" gutterBottom>
+          Pogs Market
+        </Typography>
+        <Grid container rowSpacing={1} columnSpacing={50}>
+          {pogsData.map((pogs, index) => (
+            <Grid item xs={12} sm={12} md={12} key={index} >
+              <Paper style={{ padding: 20 }}>
+                <Button variant="contained" className='buy-button' color="primary" onClick={async () => {
+                  await handleBuyPogs(pogs.id);
+                }} style={{ marginBottom: 10 }}>
+                  Buy Pog
+                </Button>
+                <Typography variant="h5" style={{ backgroundColor: pogs.color.toLowerCase() }}>{pogs.pogs_name}</Typography>
+                <Typography variant="subtitle1">Symbol: {pogs.ticker_symbol}</Typography>
+                <Typography variant="body1">Price: ${pogs.price}</Typography>
+                <Typography variant="body1">Previous Price: ${pogs.previous_price}</Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Market
+export default Market;

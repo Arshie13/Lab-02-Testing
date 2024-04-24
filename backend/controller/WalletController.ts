@@ -68,7 +68,6 @@ class WalletController {
 
   async buyPogs(req: Request, res: Response) {
     const {user_id, pogs_id, quantity} = req.body;
-    console.log("quantity: " , quantity)
     try {
       const boughtPogs = await WalletService.buyPogs(Number(user_id), Number(pogs_id), Number(quantity));
       res.status(200).send(boughtPogs);

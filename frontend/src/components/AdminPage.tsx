@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Grid, Paper, Typography, Button, TextField } from '@mui/material';
 import Navbar from './Navbar';
 import axios from 'axios';
+import React from 'react'
 
 interface PogsInfo {
   id: number;
@@ -13,24 +14,6 @@ interface PogsInfo {
   previous_price: number;
   createdAt: Date;
   updatedAt: Date;
-}
-
-const checkIfAdmin = async () => {
-  try {
-    const response = await axios.get('http://localhost:3000/users/api-auth', {
-      headers: {
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    });
-    if (response.data.role === 'admin') {
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error('Error checking if user is admin:', error);
-    alert('You are not an admin. Please login as an admin to access this page.');
-    return false;
-  }
 }
 
 const AdminPage = () => {
@@ -49,6 +32,7 @@ const AdminPage = () => {
       setPogsData(response.data);
     } catch (error) {
       console.error('Error fetching pogs data:', error);
+      navigate('/server-error');
     }
   };
 

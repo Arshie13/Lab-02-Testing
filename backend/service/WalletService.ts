@@ -109,8 +109,9 @@ class WalletService {
     let wallet = await WalletDAO.getWalletByUserId(user_id, pogs_id);
     const newBalance = user.balance + (quantity * pog.price);
     const newQuantity = wallet.quantity - quantity;
-    if (newQuantity < 0) {
-      return { error: 'Not enough Pogs to sell.' };
+    if (newQuantity <= 0) {
+      WalletDAO.deleteWallet(wallet.id);
+      return
     }
     await WalletDAO.updateWallet(user_id, pogs_id, { quantity: newQuantity }).then(async () => {
       await UserDAO.updateUser(user_id, { balance: newBalance });

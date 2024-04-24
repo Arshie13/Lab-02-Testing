@@ -46,7 +46,6 @@ function SignIn() {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user_id', response.data.userId);
       navigate('/home')
-      
     } catch (error: any) {
       if (axios.isAxiosError(error) ||
         error.response === undefined ||

@@ -5,7 +5,7 @@ import { middlewareAuth } from '../../middleware/jwt';
 export const userRouter = Router();
 
 userRouter.get('/api', UserController.getAllUsers);
-userRouter.get('/api-auth', middlewareAuth, UserController.getCurrentUser);
+userRouter.post('/api-auth', middlewareAuth, UserController.getCurrentUser);
 userRouter.get('/api/:id', UserController.getUserById);
 userRouter.get('/api-get-email', UserController.getUserByEmail);
 userRouter.post('/api-login', UserController.userLogin);
